@@ -1,0 +1,28 @@
+# Backend
+backend/bin/
+backend/vendor/
+.env
+
+# Frontend
+frontend/dist/
+frontend/node_modules/
+frontend/.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test
+coverage.out
+
+# Playwright MCP session artifacts
+.playwright-mcp/
