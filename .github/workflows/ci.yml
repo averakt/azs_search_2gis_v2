@@ -56,3 +56,23 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  deploy:
+    name: Deploy (SSH)
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/azs_search_2gis_v2
+            git pull --ff-only
+            docker compose up -d --build
+            docker image prune -f
+            curl -fsS http://127.0.0.1:8081/api/health
