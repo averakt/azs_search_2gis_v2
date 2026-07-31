@@ -26,3 +26,6 @@ coverage.out
 
 # Playwright MCP session artifacts
 .playwright-mcp/
+
+# Internal docs (ADR, review artifacts)
+docs/
