@@ -6,6 +6,10 @@ COPY package.json package-lock.json* ./
 RUN npm install
 
 COPY . .
+ARG VITE_2GIS_MAPGL_KEY
+ARG VITE_YANDEX_MAP_KEY
+ENV VITE_2GIS_MAPGL_KEY=$VITE_2GIS_MAPGL_KEY
+ENV VITE_YANDEX_MAP_KEY=$VITE_YANDEX_MAP_KEY
 RUN npm run build
 
 FROM nginx:alpine
