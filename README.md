@@ -63,7 +63,7 @@
    docker compose up --build
    ```
 
-4. Откройте http://localhost:80
+4. Откройте http://127.0.0.1:8081
 
 ### Локальная разработка
 
@@ -86,6 +86,24 @@ npm run dev
 ```
 
 Frontend доступен на http://localhost:5173
+
+## Деплой (CI/CD)
+
+Продакшен развёрнут на VPS и автоматически обновляется при пуше в `main`.
+
+**Пайплайн** (`.github/workflows/ci.yml`):
+1. **CI** (облачный runner): `go test` + `gofmt` (backend), `tsc --noEmit` + `vite build` (frontend).
+2. **Deploy** (после зелёного CI, только на `push` в `main`): по SSH на сервер — `git pull --ff-only` → `docker compose up -d --build` → `docker image prune -f` → health-check `http://127.0.0.1:8081/api/health`.
+
+Деплой идёт от пользователя `deploy` (группа `docker`) через SSH-ключ из GitHub Secret `DEPLOY_SSH_KEY`. Ключи API лежат только на сервере в `.env` (в репозиторий не попадают).
+
+**Релиз новой версии:**
+```bash
+git push origin main
+gh run watch --repo averakt/azs_search_2gis_v2   # следить за пайплайном
+```
+
+**Откат:** `git revert <sha> && git push origin main` — CD катит предыдущую версию.
 
 ## API
 
